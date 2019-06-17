@@ -1,0 +1,44 @@
+{
+    "name": "byteas/bank-id",
+    "description": "BankID",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "bankid"
+    ],
+    "support": {
+        "docs": "https://byte.no",
+        "issues": "https://byte.no"
+    },
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Byte AS",
+            "homepage": "https://byte.no"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "byteas\\bankid\\": "src/"
+        }
+    },
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1",
+        "jumbojett/openid-connect-php": "^0.8.0"
+    },
+    "extra": {
+        "name": "BankID",
+        "handle": "bank-id",
+        "hasCpSettings": true,
+        "hasCpSection": true,
+        "changelogUrl": "???",
+        "components": {
+            "bankIDService": "byteas\\bankid\\services\\BankIDService"
+        },
+        "class": "byteas\\bankid\\BankID"
+    }
+}

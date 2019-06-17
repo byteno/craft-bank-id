@@ -1,0 +1,173 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * BankID plugin for Craft CMS 3.x
+ *
+ * BankID index.twig
+ *
+ * @author    Byte AS
+ * @copyright Copyright (c) 2019 Byte AS
+ * @link      https://byte.no
+ * @package   BankID
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+{% set title = "BankID - Setup" %}
+{% set selectedSubnavItem = 'setup' %}
+
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@byteas/bankid/assetbundles/indexcpsection/dist', true) ~ '/img/copy-content.svg' %}
+{% set setupVariables = craft.bankID.setupVariables %}
+{% set pluginReady = setupVariables.client_id != "" ? true : false %}
+
+{% set content %}
+
+    {% if setupVariables.website_url == "" %}
+
+        <form  enctype="multipart/form-data" action="/actions/bank-id/setup/save-website-url" method="post">
+
+            <h1 style="float: left;">Step 1</h1>
+            <h3 style="float: right;">Plugin Status:
+                {% if pluginReady %}
+                    <span style="color: green;">Ready to use</span>
+                {% else %}
+                    <span style="color: gray;">Setup unfinished</span>
+                {% endif %}
+            </h3>
+            <div style="clear: both;"></div>
+            <h3>Set the public website URL here. HTTPS is needed</h3>
+
+            {{ csrfInput() }}
+            <input type="hidden" name="redirect" value="{{ craft.request.url }}">
+
+            {{ forms.textField({
+                label: 'Public website URL *',
+                instructions: 'Required. Has to be this public website url with https. Save the field to generate BankID callback URL.',
+                id: 'website_url',
+                value:craftSiteUrl,
+                name: 'website_url'})
+            }}
+
+            <input type="submit" class="submit btn" value="{{ 'Save and continue'|t }}">
+
+        </form>
+
+    {% else %}
+
+        <h1 style="float: left;">Step 2</h1>
+        <h3 style="float: right;">Plugin Status:
+            {% if pluginReady %}
+                <span style="color: green;">Ready to use</span>
+            {% else %}
+                <span style="color: gray;">Setup unfinished</span>
+            {% endif %}
+        </h3>
+        <div style="clear: both;"></div>
+        <h3>Provide the following Callback URL to BankID</h3>
+
+        <div style="padding: 15px; font-weight: bold; border-radius: 5px; border: 1px solid #228B22;">
+            <img title="Copy to clipboard" onclick="copyUrl()" alt="copy-url-icon"  style="vertical-align: middle; margin-right: 15px; cursor:pointer;" src="{{ iconUrl }}"><span id="copy-url">{{ setupVariables.website_url }}{{ setupVariables.callback_endpoint }}</span>
+        </div>
+
+        <hr>
+
+        <h1>Step 3</h1>
+        <h3>Populate fields below with information received from BankID</h3>
+
+        <form id="form" enctype="multipart/form-data" action="" method="post">
+
+            {{ csrfInput() }}
+            <input type="hidden" name="redirect" value="{{ craft.request.url }}">
+            <input type="hidden" name="action" value="bank-id/setup/save-setup">
+
+            <div class="field">
+                <div class="heading">
+                    <label id="client_id-label" for="client_id">Base URL *</label>
+                    <div class="instructions">
+                        Required. Choose BankID environment
+                    </div>
+                </div>
+                <div class="select">
+                    <select id="base_url" name="base_url">
+                        <option value="">Choose environment</option>
+                        {% for key, val in setupVariables.base_urls %}
+                            <option {% if setupVariables.base_url == val %} selected="selected" {% endif %} value="{{ val }}">{{ key }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="heading">
+                    <label id="client_id-label" for="client_id">User Group *</label>
+                    <div class="instructions">
+                        Required. Choose a UserGroup for BankID Users.
+                    </div>
+                </div>
+                {% if usergroups|length > 0 %}
+                    <div class="select">
+                        <select id="usergroup" name="usergroup">
+                            <option value="">Choose a UserGroup</option>
+                            {% for value in usergroups %}
+                                <option {% if setupVariables.usergroup == value["id"] %} selected="selected" {% endif %} value="{{ value["id"] }}">{{ value["name"] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% else %}
+                    <p style="color: red;">No UserGroups was found. Please create a group at <a href="/admin/settings/users">Settings->Users</a></p>
+                {% endif %}
+            </div>
+
+            <div class="field">
+                <div class="heading">
+                    <label>Client ID *</label>
+                    <div class="instructions">
+                        Required. Provided by BankID
+                    </div>
+                </div>
+                <div class="input ltr">
+                    <input required class="text fullwidth" type="text" name="client_id" value="{{ setupVariables.client_id }}">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="heading">
+                    <label>Client Secret *</label>
+                    <div class="instructions">
+                        Required. Provided by BankID
+                    </div>
+                </div>
+                <div class="input ltr">
+                    <input required class="text fullwidth" type="text" name="client_secret" value="{{ setupVariables.client_secret }}">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="heading">
+                    <label>Website URL for redirect *</label>
+                    <div class="instructions">
+                        Required. Has to be this public website url. Save the field to generate a new BankID callback URL.
+                    </div>
+                </div>
+                <div class="input ltr">
+                    <input required class="text fullwidth" type="text" name="website_url" value="{{ setupVariables.website_url }}">
+                </div>
+            </div>
+
+            <input type="submit" class="submit btn" value="{{ 'Save'|t }}">
+
+        </form>
+
+        <div id="modal" style="display: none;z-index: 200;position: fixed;top:0;left:0;background-color: rgba(0,0,0,0.2); width: 100%; height: 100%;">
+            <div id="modal-content" style="font-weight: bold;background-color: white; border: 1px solid black; border-radius: 7px; padding: 15px;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+                URL copied to clipboard!
+            </div>
+        </div>
+
+        <script src="{{ view.getAssetManager().getPublishedUrl('@byteas/bankid/assetbundles/indexcpsection/dist', true) ~ '/js/index.js' }}"></script>
+
+    {% endif %}
+
+{% endset %}

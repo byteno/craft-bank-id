@@ -1,0 +1,64 @@
+{% set bg = view.getAssetManager().getPublishedUrl('@byteas/bankid/assetbundles/bankid/dist', true) ~ '/img/abstract_bg.png' %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>{{ 'Registration'|t }}</title>
+        <style>
+            body{
+                font-family: 'Verdana', sans-serif;
+                height: 100%;
+                width: 100%;
+                background-image: url({{ bg }});
+            }
+            #form input[type="email"]{
+                padding: 8px 20px;
+                width: 180px;
+                text-align: center;
+                margin-top: 35px;
+            }
+            #button{
+                padding: 8px 20px;
+                background-color: blue;
+                color: white;
+                border: 0;
+                border-radius: 6px;
+                cursor: pointer;
+            }
+            .centered {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }​
+        </style>
+    </head>
+    <body>
+
+        <div class="centered">
+
+            <h1>Hei, {{ first_name }} {{ last_name }}</h1>
+            <p>Fullfør registreringen ved å fylle inn din epost under</p>
+
+            <form action="" method="post" id="form">
+
+                {{ csrfInput() }}
+                <input type="hidden" name="redirect" value="{{ craft.app.request.absoluteUrl }}">
+                <input type="hidden" name="action" value="bank-id/user/register">
+
+                <div class="field">
+                    <div class="input ltr">
+                        <input class="text fullwidth" placeholder="Din epost" type="email" name="email">
+                    </div>
+                    <p style="color: red;">{{ craft.app.session.getFlash("error") }}</p>
+                </div>
+
+                <input id="button" type="submit" value="Registrer">
+
+            </form>
+
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,92 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * BankID plugin for Craft CMS 3.x
+ *
+ * BankID index.twig
+ *
+ * @author    Byte AS
+ * @copyright Copyright (c) 2019 Byte AS
+ * @link      https://byte.no
+ * @package   BankID
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+{% set title = "BankID - Settings" %}
+{% set selectedSubnavItem = 'settings' %}
+
+{% set settingsVariables = craft.bankID.settingsVariables %}
+
+{% set content %}
+
+   <h1>Settings</h1>
+   <p>Change the basic behaviour settings here. Remember to complete the <a href="/admin/bank-id/setup">Setup</a> first for the plugin to work.</p>
+
+   <hr>
+   <form action="" method="post">
+
+      {{ csrfInput() }}
+      <input type="hidden" name="redirect" value="{{ craft.app.request.absoluteUrl }}">
+      <input type="hidden" name="action" value="bank-id/settings/save-settings">
+
+      <h2>Registered users</h2>
+
+      <div class="field">
+         <div class="heading">
+            <label>Redirect after login</label>
+            <div class="instructions">
+               After an already registered user logs in or registers with BankID redirect to the following URL:
+            </div>
+         </div>
+         <div class="input ltr">
+            <input class="text fullwidth" type="text" name="redirect_after_login" placeholder="Defaults to / (home) if not populated" value="{{ settingsVariables.redirect_after_login }}">
+         </div>
+      </div>
+
+      <h2>New users</h2>
+
+      <div class="field">
+         <div class="heading">
+            <label>Allow users to register?</label>
+            <div class="instructions">
+               Should new users be allowed to register? If set to false -> all users needs to be created by admin
+            </div>
+         </div>
+         <div id="switch_allow_registration" class="lightswitch {{ settingsVariables.allow_registration ? "on" : "off" }}" tabindex="0" data-value="{{ settingsVariables.allow_registration }}">
+            <div class="lightswitch-container">
+               <div class="label on"></div>
+               <div class="handle"></div>
+               <div class="label off"></div>
+            </div>
+         </div>
+         <input id="input_allow_registration" type="hidden" name="allow_registration" value="{{ settingsVariables.allow_registration }}" >
+      </div>
+
+      <input type="submit" class="submit btn" value="{{ 'Save'|t }}">
+
+      <script>
+
+         let switch_allow_registration = document.getElementById('switch_allow_registration');
+
+         switch_allow_registration.onclick = function(){
+
+            let switchElement = document.getElementById("switch_allow_registration");
+            let switchValue = switchElement.getAttribute("aria-checked");
+
+            if(switchValue === "true"){
+               document.getElementById('input_allow_registration').value = 1;
+            }else{
+               document.getElementById('input_allow_registration').value = 0;
+            }
+
+         }
+      </script>
+
+   </form>
+
+
+
+{% endset %}

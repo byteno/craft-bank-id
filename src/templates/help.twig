@@ -1,0 +1,18 @@
+{% extends "_layouts/cp" %}
+{% set title = "BankID - Help"|t('plugin-handle') %}
+
+{% set selectedSubnavItem = 'help' %}
+
+{% block content %}
+    <h1>Help</h1>
+    <hr>
+    <h3>Get started</h3>
+    <ol>
+        <li> Complete Step 1 from the <a href="/admin/bank-id/setup">setup</a> page so that you can get the callback url needed for BankID registration. <b>The URL needs to be public and https</b>.</li>
+        <li>Copy the URL from Step 2 and provide it as "Redirect URL" when ordering Bank ID (<a target="_blank" href="https://servicedesk.bankidnorge.no/jira/servicedesk/customer/portal/8">BankID Jira Portal</a> - Click "Access" and populate the fields after you have created an account)</li>
+        <li>It might take a while to get the credentials from BankID but as soon as you get it you can populate the fields in Step 3 of the setup page. Choose Environment "Current" for testing</li>
+        <li>Generate a random test user <a target="_blank" href="https://ra-preprod.bankidnorge.no/#/generate">Here</a>. One Time Code is "otp" and  password is "qwer1234". Same password for all test users. </li>
+        <li>Put a login button in your twig file using "craft.bankID.loginButton" as a variable or create your own buttin/link pointing to "/bank-id/bank-id-login"</li>
+    </ol>
+
+{% endblock %}

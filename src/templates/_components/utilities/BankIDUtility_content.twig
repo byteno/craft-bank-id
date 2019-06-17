@@ -1,0 +1,24 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * BankID plugin for Craft CMS
+ *
+ * BankIDUtility Utility Content
+ *
+ * @author    Byte AS
+ * @copyright Copyright (c) 2019 Byte AS
+ * @link      https://byte.no
+ * @package   BankID
+ * @since     1.0.0
+ */
+#}
+
+<h1>BankIDUtility</h1>
+
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@byteas/bankid/assetbundles/bankidutilityutility/dist', true) ~ '/img/BankIDUtility-icon.svg' %}
+
+<img src="{{ iconUrl }}" height="64" width="64" />
+
+<p>Your Utility content goes here</p>
+
+<p>{{ someVar }}</p>

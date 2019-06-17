@@ -1,0 +1,7 @@
+{% set bankIDLogo = view.getAssetManager().getPublishedUrl('@byteas/bankid/assetbundles/bankid/dist', true) ~ '/img/bank-id-logo.png' %}
+
+<a href="/bank-id/bank-id-login">
+    <div class="bank-id-login-button" style="padding: 12px 30px; background-color: white; border: 1px solid #1F77BD; border-radius: 7px; display: inline-block;">
+        <img style="height: 25px;" alt="BankID Logo" src="{{ bankIDLogo }}">
+    </div>
+</a>

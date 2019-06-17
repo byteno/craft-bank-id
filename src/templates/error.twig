@@ -1,0 +1,33 @@
+{% set bg = view.getAssetManager().getPublishedUrl('@byteas/bankid/assetbundles/bankid/dist', true) ~ '/img/abstract_bg.png' %}
+
+<html lang="en">
+    <head>
+        <title>BankID - Login Error</title>
+        <style>
+            body{
+                font-family: 'Verdana', sans-serif;
+                height: 100%;
+                width: 100%;
+                background-image: url({{ bg }});
+            }
+            .centered {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }​
+        </style>
+    </head>
+    <body>
+        <div class="centered">
+
+            <h1>Error</h1>
+
+            <p>{{ errorMessage }}</p>
+
+            <p><a href="/">Tilbake til nettsiden</a></p>
+
+        </div>
+    </body>
+</html>
